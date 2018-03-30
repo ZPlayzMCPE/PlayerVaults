@@ -50,7 +50,7 @@ class Provider{
     const UNKNOWN = 3;
 
     /** @var BigEndianNBTStream */
-+    private static $nbtWriter;
+    private static $nbtWriter;
     
     /** @var array|string */
      private $data;//data for provider
