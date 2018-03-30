@@ -137,7 +137,10 @@ class Provider{
         $this->server->getScheduler()->scheduleAsyncTask(new FetchInventoryTask($name, $this->type, $number, $viewer ?? $name, $this->data));
     }
 
-    public function get(Player $player, array $contents, int $number = 1, ?string $vaultof = null) : ?VaultInventory
+   /**
+    * @internal
+    */
+    public function send(Player $player, array $contents, int $number = 1, ?string $vaultof = null) : ?VaultInventory
     {
         $vaultof = $vaultof ?? $player->getLowerCaseName();
 
