@@ -40,7 +40,7 @@ class VaultInventory extends ContainerInventory {
     /** @var int */
     protected $number;
 
-    public function setVaultData(string $vaultof, int $number)
+    public function setVaultData(Position $pos, string $vaultof, int $number)
     {
         $this->vaultof = $vaultof;
         $this->number = $number;
