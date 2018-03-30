@@ -49,8 +49,11 @@ class Provider{
     const MYSQL = 2;
     const UNKNOWN = 3;
 
+    /** @var BigEndianNBTStream */
++    private static $nbtWriter;
+    
     /** @var array|string */
-    private $data;//data for provider
+     private $data;//data for provider
 
     /** @var Server */
     private $server;
@@ -154,8 +157,9 @@ class Provider{
 
         $pos->level->sendBlocks([$player], [Block::get(Block::CHEST, 0, $pos)]);
 
-        $inventory = new VaultInventory($pos, $vaultof, $number);
-        $inventory->setContents($contents);
+         $inventory = new VaultInventory($pos, $vaultof, $number);
+         $inventory->setVaultData($pos, $vaultof, $number);
+         $inventory->setContents($contents);
 
         $player->dataPacket($this->createVaultPacket($inventory, $this->getInventoryName($number)));
         return $inventory;
@@ -175,7 +179,7 @@ class Provider{
             $tag->setString("CustomName", $inventoryName);
         }
 
-        $nbtWriter = new NetworkLittleEndianNBTStream();
+        $nbtWriter = new BigEndianNBTStream();
         $nbtWriter->setData($tag);//we don't need to add x, y and z... it's only used for saving but we aren't saving vault tiles in the Level.
         $pk->namedtag = $nbtWriter->write();
 
@@ -191,7 +195,7 @@ class Provider{
             $item = $item->nbtSerialize($slot);
         }
 
-        $nbt = new BigEndianNBTStream();
+        $nbt = new NetworkLittleEndianNBTStream();
         $nbt->setData(new CompoundTag("Items", [new ListTag("ItemList", $contents)]));
         $contents = $nbt->writeCompressed(ZLIB_ENCODING_DEFLATE);//maybe do compression in SaveInventoryTask?
 
